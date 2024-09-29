@@ -1,37 +1,61 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import GetActor from './components/getActor';
+import GetRent from './components/topRent';
+import GetTopStore from './components/topInStore';
+import GetCustomers from './components/getCustomers';
+import './App.css';
 
 function App() {
-
-  const [backendData, setBackendData] = useState([])
-
-  useEffect(() => {
-    fetch("/api")
-    .then(response => response.json())
-    .then(data => setBackendData(data));
-  }, [])
+  const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 5 });
 
   return (
-    <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Age</th>
-            <th>Occupation</th>
-          </tr>
-        </thead>
-        <tbody>
-          {backendData.map((actor, actor_id) => (
-            <tr key={actor_id}>
-              <td>{actor_id}</td> {/* Or use user.id if available */}
-              <td>{actor.first_name}</td>
-              <td>{actor.last_name}</td>
-              <td>{actor.last_update}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <Router>
+      <div>
+        <nav>
+          <ul className="navbar">
+            <li>
+              <Link to="/">Home</Link>
+            </li>
+            <li>
+              <Link to="/actors">Actors</Link>
+            </li>
+            <li>
+              <Link to="/customers">Customers</Link>
+            </li>
+          </ul>
+        </nav>
+
+        <Routes>
+          {/* Home Route */}
+          <Route 
+            path="/" 
+            element={
+              <>
+                <GetRent />
+                <GetTopStore />
+              </>
+            } 
+          />
+          
+          {/* Actors Route */}
+          <Route 
+            path="/actors" 
+            element={<GetActor paginationModel={paginationModel} setPaginationModel={setPaginationModel} />} 
+          />
+
+          <Route
+            path="/customers"
+            element={
+              <>
+                <GetCustomers paginationModel={paginationModel} setPaginationModel={setPaginationModel} />
+              </>
+            } 
+          />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 
-export default App
+export default App;
