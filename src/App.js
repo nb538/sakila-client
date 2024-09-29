@@ -1,25 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from 'react'
 
 function App() {
+
+  const [backendData, setBackendData] = useState([])
+
+  useEffect(() => {
+    fetch("/api")
+    .then(response => response.json())
+    .then(data => setBackendData(data));
+  }, [])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Age</th>
+            <th>Occupation</th>
+          </tr>
+        </thead>
+        <tbody>
+          {backendData.map((actor, actor_id) => (
+            <tr key={actor_id}>
+              <td>{actor_id}</td> {/* Or use user.id if available */}
+              <td>{actor.first_name}</td>
+              <td>{actor.last_name}</td>
+              <td>{actor.last_update}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
   );
 }
 
-export default App;
+export default App
