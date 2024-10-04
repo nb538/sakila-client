@@ -1,6 +1,27 @@
-body {
+html body {
     display: flex;
+    background-color: slategray;
     flex-direction: column;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+#footer {
+  display:flex;
+  width: 100%;
+  height: 80px;
+  background-color: gold;
+  align-items: center;
+  justify-content: center;
+}
+
+#footer {
+  font-weight: bold;
+  font-size: 24px;
 }
 
 .actor-container {
@@ -15,34 +36,291 @@ body {
     margin-bottom: 20px;
 }
 
-.data-grid {
-    border: 4px solid #ccc;
-    border-radius: 4px;
+.customer-title {
+  margin: 2% 5% 2%;
 }
 
-.navbar {
-    display: flex;
-    list-style-type: none;
-    padding: 10px;
-    background-color: #333;
-    margin: 0;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .navbar li {
-    margin: 0 15px; /* Space out the nav items */
-  }
-  
-  .navbar a {
-    color: white; /* Text color */
-    text-decoration: none; /* Remove underline */
-    padding: 10px 15px; /* Add padding for clickable area */
-    transition: background-color 0.3s; /* Smooth transition for hover */
-  }
-  
-  .navbar a:hover {
-    background-color: #555; /* Change background on hover */
-    border-radius: 5px; /* Slight rounding on hover */
-  }
-  
+.filter-container {
+  margin-left: 5%;
+}
+
+.data-grid {
+  border: 4px solid #ccc;
+  border-radius: 4px;
+  margin: 2% 5% 3%;
+  background-color: lightsteelblue;
+}
+
+.MuiDataGrid-columnHeader {
+  background-color: gold;
+}
+
+.data-grid p {
+  display: flex;
+  align-self: center;
+  margin-top: 2px;
+}
+
+.customer-textfield .MuiInputLabel-root {
+  color: gold;
+}
+
+.customer-textfield .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: gold;
+}
+
+.customer-textfield .MuiInputLabel-root.Mui-focused {
+  color: gold;
+}
+
+#navbar-tooltip {
+  margin-left: 8px;
+}
+
+.nav {
+  background-color: gold;
+}
+
+.nav .nav-brand {
+  font-family: 'Bebas Neue', Cinzel;
+  font-size: 40px;
+  font-weight: bold;
+  color:black;
+  margin: 14px 5% 14px;
+}
+
+#elegant {
+  width: 30%;
+  height: 5%;
+  margin-right: 21%;
+}
+
+.nav .nav-link {
+  background-color: black;
+  margin: 2px 0px 2px;
+  border-radius: 10px;
+  padding-left: 10px;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  font-size: 24px;
+  color: gold;
+}
+
+.nav .nav-link:hover {
+  color: whitesmoke;
+}
+
+.css-16mfp94-MuiTablePagination-root .MuiTablePagination-toolbar {
+  align-items: baseline;
+}
+
+.progbar {
+  width: 80%;
+  margin-left: 10%;
+  margin-top: 20%;
+}
+
+.carousel-item img {
+  object-fit: cover;
+}
+
+.carousel {
+  max-width: 100%;
+  max-height: 100%;
+  margin: 0%;
+}
+
+.carousel-link {
+  border-radius: 6px;
+  padding: 6px;
+  background-color: black;
+  color: gold;
+}
+
+#horse1 {
+  padding-right: 1%;
+}
+
+#horse2 {
+  margin-left: 1%;
+  padding-left: 1%;
+  transform: scaleX(-1);
+}
+
+.horse {
+  margin: 0px;
+  height: 60%;
+  width: 25%;
+}
+
+.home-carousel {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.table-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-collapse: separate;
+}
+
+.top-per-stores-container {
+  display: flex;
+  flex-direction: row;
+  width: 90%;
+  margin-left: 5%;
+  margin-top: 5%;
+  margin-bottom: 60px;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.top-per-stores-container td {
+  display: flex;
+  width: 100%;
+  background-color: crimson;
+  justify-content: center;
+  border-radius: 10px;
+}
+
+.top-per-stores-container tr {
+  align-items: center;
+  width: 90%;
+  color:gold;
+}
+
+#toprent-table {
+  width: 80%;
+  font-family: 'Cinzel', serif;
+  font-size: 3em;
+  font-weight: bold;
+  margin-bottom: 5%;
+}
+
+#toprent-table tr {
+  display: flex;
+  width: 80%;
+  margin-left: 10%;
+  align-items: center;
+  background-color:goldenrod;
+  border-radius: 10px;
+}
+
+#toprent-table td {
+  display: flex;
+  justify-content: space-between;
+  padding: 0% 2% 0%;
+}
+
+.toprent-dialog p {
+  color: gold;
+  background-color: black;
+}
+
+.toprent-dialog {
+  padding-top: 10px;
+  background-color: black;
+}
+
+.topactor-dialog-title {
+  background-color: gold;
+}
+
+.topactor-dialog {
+  padding-top: 10px;
+  background-color: black;
+}
+
+.topactor-dialog p, li, h3 {
+  color: gold;
+}
+
+#reel-pic {
+  max-width: 8%;
+  max-height: 8%;
+}
+
+#topactor-table {
+  width: 80%;
+  font-family: 'Cinzel', serif;
+  font-size: 3em;
+  font-weight: bold;
+}
+
+#mask-pic {
+  width: 10%;
+  height: 90%;
+}
+
+#topactor-table tr {
+  display: flex;
+  border-radius: 10px;
+  width: 90%;
+  justify-content: flex-start;
+  margin: 8px 5% 8px;
+}
+
+#topactor-table td {
+  display: flex;
+  color: black;
+  margin-left: 5%;
+  justify-content: space-between;
+  margin: 0.5% 2% 0%;
+}
+
+#store-actor-table {
+  width: 100%;
+  font-family: 'Cinzel', serif;
+  font-size: 3em;
+  font-weight: bold;
+  color: gold
+}
+
+.store-paper {
+  display: flex;
+  justify-content: center;
+  margin-top: 12px;
+  margin-bottom: 12px;
+}
+
+.film-textfield .MuiInputLabel-root {
+  color: gold;
+}
+
+.film-textfield .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: gold;
+}
+
+.film-textfield .MuiInputLabel-root.Mui-focused {
+  color: gold;
+}
+
+.film-modal {
+  background-color: black;
+}
+
+.film-modal p {
+  background-color: black;
+  color: gold;
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+
+.film-modal h5 {
+  background-color: black;
+  color: gold;
+  margin-top: 16px;
+  margin-bottom: 8px;
+}
+
+.film-page {
+  display:flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.film-body {
+  align-self: start;
+  margin-left: 4%
+}

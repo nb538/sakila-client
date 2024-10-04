@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { DataGrid } from '@mui/x-data-grid/'
+import '../App.css'
 
 const GetActor = ({paginationModel, setPaginationModel}) => {
   const [data, setData] = useState([]);
@@ -49,12 +50,13 @@ const GetActor = ({paginationModel, setPaginationModel}) => {
         getRowId={getRowId}
         rows={data}
         columns={columns}
-        pahination
+        pagination
         paginationModel={paginationModel}
         onPaginationModelChange={setPaginationModel}
         pageSizeOptions={[5,10,20]}
         className="data-grid"
         sx={{width: '60%', height: changeHeight()}}
+
     />
     </div>
   );

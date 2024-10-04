@@ -1,25 +1,43 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { ProgressBar } from 'react-bootstrap';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from '@mui/material';
+import Paper from '@mui/material/Paper'
+import 'bootstrap/dist/css/bootstrap.min.css';
+import mask from '../assets/images/mask.png'
 
 const GetTopStore = () => {
-  const [data1, setData1] = useState([]);
-  const [data2, setData2] = useState([]);
   const [data3, setData3] = useState([]);
+  const [data4, setData4] = useState([]);
+  const [data5, setData5] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [progress, setProgress] = useState(0);
   const [error, setError] = useState('');
-  const [open, setOpen] = useState(false);
+  const [open1, setOpen1] = useState(false);
+  const [open2, setOpen2] = useState(false);
   const [selectedActor, setSelectedActor] = useState(null);
+  const [selectedTop, setSelectedTop] = useState(null);
+  const colorPalette = ['gold', 'silver', 'burlywood', 'crimson', 'crimson'];
 
   useEffect(() => {
     const fetchData = async () => {
+      const interval = setInterval(() => {
+        setProgress(prev => {
+          if (prev >= 100) {
+            clearInterval(interval);
+            return 100;
+          }
+          return prev + 10; // Increment progress
+        });
+      }, 100);
+
       try {
-        const response1 = await axios.get('/api/topinstore1');
-        setData1(response1.data);
-        const response2 = await axios.get('/api/topinstore2');
-        setData2(response2.data);
         const response3 = await axios.get('/api/toprentperactor');
         setData3(response3.data);
+        const response4 = await axios.get('/api/topperstore');
+        setData4(response4.data);
+        const response5 = await axios.get('/api/topactorall');
+        setData5(response5.data);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -30,21 +48,43 @@ const GetTopStore = () => {
     fetchData();
   }, []);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <ProgressBar striped variant="warning" animated now={progress} className="progbar" />;
   if (error) return <p>Error: {error}</p>;
 
   const handleActorClick = (actor) => {
-    setSelectedActor(actor);
-    setOpen(true);
+    const topperFilter1 = data4.filter(item => item.actor_id === actor.actor_id && item.store_id === 1).slice(0,5);
+    const topperFilter2 = data4.filter(item => item.actor_id === actor.actor_id && item.store_id === 2).slice(0,5);
+
+    setSelectedActor({
+      ...actor,
+      store1Info: topperFilter1 || {},
+      store2Info: topperFilter2 || {}
+    });
+    setOpen1(true);
   };
 
-  const handleClose = () => {
-    setOpen(false);
+  const handleActorClickTop = (actor) => {
+    const topFilter = data5.filter(item => item.actor_id === actor.actor_id);
+
+    setSelectedTop({
+      ...actor,
+      topInfo: topFilter || {},
+    });
+    setOpen2(true);
+  };
+
+  const handleClose1 = () => {
+    setOpen1(false);
     setSelectedActor(null);
   };
 
+  const handleClose2 = () => {
+    setOpen2(false);
+    setSelectedTop(null);
+  };
+
   const titleFix = (title) => {
-    if (!title) return '';
+    if (typeof title !== 'string') return '';
     return title.split(' ')
       .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
       .join(' ');
@@ -56,60 +96,71 @@ const GetTopStore = () => {
 }
 
 
-  const actorFilms = selectedActor
-    ? data3.filter(item => item.actor_id === selectedActor.actor_id).slice(0, 5)
-    : [];
+  const actorFilms = selectedActor ? data3.filter(item => item.actor_id === selectedActor.actor_id).slice(0, 5) : [];
+  const topFilms = selectedTop ? data3.filter(item => item.actor_id === selectedTop.actor_id).slice(0,5) : [];
 
+
+  const store1Actors = data4.filter(item => item.store_id === 1).slice(0, 5);
+  const store2Actors = data4.filter(item => item.store_id === 2).slice(0, 5);
+  
   return (
     <>
-      <div className="actor-container">
-        <h1 className="actor-title">Top 5 Actors in Store 1</h1>
-        <table className="data-table" style={{ width: '60%', borderCollapse: 'collapse' }}>
-          <thead>
-            <tr>
-              <th style={{ border: '1px solid #ccc', padding: '8px' }}>Actor</th>
-              <th style={{ border: '1px solid #ccc', padding: '8px' }}>Films Acted in Store</th>
-            </tr>
-          </thead>
+      <div className="table-container">
+        <h1 className="table-title">Top 5 Actors of All Time</h1>
+        <table id="topactor-table">
           <tbody>
-            {data1.map((item) => (
-              <tr key={item.id} onClick={() => handleActorClick(item)} style={{ cursor: 'pointer' }}>
-                <td style={{ border: '1px solid #ccc', padding: '8px' }}>{titleFix(item.first_name)} {titleFix(item.last_name)}</td>
-                <td style={{ border: '1px solid #ccc', padding: '8px' }}>{item.acted}</td>
+            {data5.map((item, index) => (
+              <Paper sx={{ backgroundColor: 'black', borderRadius: '10px' }} elevation={10}>
+              <tr key={item} onClick={() => handleActorClickTop(item)} style={{ backgroundColor: colorPalette[index % colorPalette.length], cursor: 'pointer' }}>
+                <td>{index+1}. {titleFix(item.first_name)} {titleFix(item.last_name)} <img src={mask} id="mask-pic" alt="" /></td>
               </tr>
+              </Paper>
             ))}
           </tbody>
         </table>
       </div>
 
-      <div className="actor-container1">
-        <h1 className="actor-title">Top 5 Actors in Store 2</h1>
-        <table className="data-table" style={{ width: '60%', borderCollapse: 'collapse' }}>
-          <thead>
-            <tr>
-              <th style={{ border: '1px solid #ccc', padding: '8px' }}>Actor</th>
-              <th style={{ border: '1px solid #ccc', padding: '8px' }}>Films Acted in Store</th>
-            </tr>
-          </thead>
+      <div className="top-per-stores-container">
+        <div className="table-container">
+        <h1 className="table-title">Top 5 Actors in Store 1</h1>
+        <table id="store-actor-table">
           <tbody>
-            {data2.map((item) => (
-              <tr key={item.id} onClick={() => handleActorClick(item)} style={{ cursor: 'pointer' }}>
-                <td style={{ border: '1px solid #ccc', padding: '8px' }}>{titleFix(item.first_name)} {titleFix(item.last_name)}</td>
-                <td style={{ border: '1px solid #ccc', padding: '8px' }}>{item.acted}</td>
+            {store1Actors.map((item) => (
+              <Paper sx={{ backgroundColor: 'black', borderRadius: '10px' }} elevation={10} className="store-paper">
+              <tr key={item} onClick={() => handleActorClick(item)} style={{ cursor: 'pointer' }}>
+                <td>{titleFix(item.first_name)} {titleFix(item.last_name)}</td>
               </tr>
+              </Paper>
             ))}
           </tbody>
         </table>
+        </div>
+
+        <div className="table-container">
+        <h1 className="table-title">Top 5 Actors in Store 2</h1>
+        <table id="store-actor-table">
+          <tbody>
+            {store2Actors.map((item) => (
+              <Paper sx={{ backgroundColor: 'black', borderRadius: '10px' }} elevation={10} className="store-paper">
+              <tr key={item} onClick={() => handleActorClick(item)} style={{ cursor: 'pointer' }}>
+                <td>{titleFix(item.first_name)} {titleFix(item.last_name)}</td>
+              </tr>
+              </Paper>
+            ))}
+          </tbody>
+        </table>
+        </div>
       </div>
 
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Actor Details</DialogTitle>
-        <DialogContent>
+      <Dialog open={open1} onClose={handleClose1}>
+        <DialogTitle className="topactor-dialog-title">Actor Details</DialogTitle>
+        <DialogContent className="topactor-dialog">
           {selectedActor && (
-            <div>
+            <div className="topactor-dialog">
               <p><strong>Name:</strong> {titleFix(selectedActor.first_name)} {titleFix(selectedActor.last_name)}</p>
               <p><strong>Last Updated:</strong> {removeLetters(selectedActor.last_update)}</p>
-              <h3>Top 5 Rented Films:</h3>
+              <p><strong>Films Acted in Inventory:</strong> {selectedActor.movie_count} movies</p>
+              <h3 style={{color: 'gold'}}>Top 5 Rented Films:</h3>
               <ul>
                 {actorFilms.map((film, index) => (
                   <li key={index}>{titleFix(film.title)} -- Times Rented: {film.rented}</li> 
@@ -118,8 +169,32 @@ const GetTopStore = () => {
             </div>
           )}
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color="primary">
+        <DialogActions className="topactor-dialog">
+          <Button onClick={handleClose1} color="primary">
+            Dismiss
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog open={open2} onClose={handleClose2}>
+        <DialogTitle className="topactor-dialog-title">Actor Details</DialogTitle>
+        <DialogContent className="topactor-dialog">
+          {selectedTop && (
+            <div className="topactor-dialog">
+              <p><strong>Name:</strong> {titleFix(selectedTop.first_name)} {titleFix(selectedTop.last_name)}</p>
+              <p><strong>Last Updated:</strong> {removeLetters(selectedTop.last_update)}</p>
+              <p><strong>Films Acted Overall: </strong> {selectedTop.acted} movies</p>
+              <h3 style={{color: 'gold'}}>Top 5 Rented Films:</h3>
+              <ul>
+                {topFilms.map((film, index) => (
+                  <li key={index}>{titleFix(film.title)} -- Times Rented: {film.rented}</li> 
+                ))}
+              </ul>
+            </div>
+          )}
+        </DialogContent>
+        <DialogActions className="topactor-dialog">
+          <Button onClick={handleClose2} color="primary">
             Dismiss
           </Button>
         </DialogActions>
