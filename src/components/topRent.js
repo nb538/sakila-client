@@ -30,7 +30,15 @@ const GetRent = () => {
         const response = await axios.get('/api/toprent');
         setData(response.data);
       } catch (err) {
-        setError(err.message);
+        if(err.response) {
+          const status = err.response.status;
+          const statusText = err.response.statusText;
+          setError(`Error ${status}: ${statusText}, Please try again later.`);
+        } else if (err.request) {
+          setError("Netwrok error: Unable to reach the server. Please check your network connesctions.");
+        } else {
+          setError(`Error: ${err.message}`);
+        }
       } finally {
         setTimeout(() => {
           setLoading(false);
@@ -42,7 +50,7 @@ const GetRent = () => {
   }, []);
 
   if (loading) return <ProgressBar striped variant="warning" animated now={progress} className="progbar" />;
-  if (error) return <p>Error: {error}</p>;
+  if (error) return <p>{error}</p>;
 
   // Handle movie title click
   const handleTitleClick = (movie) => {

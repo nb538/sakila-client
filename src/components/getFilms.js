@@ -42,7 +42,15 @@ const GetFilms = () => {
         const response3 = await axios.get('/api/currentrent');
         setData3(response3.data);
       } catch (err) {
-        setError(err.message);
+        if(err.response) {
+          const status = err.response.status;
+          const statusText = err.response.statusText;
+          setError(`Error ${status}: ${statusText}, Please try again later.`);
+        } else if (err.request) {
+          setError("Netwrok error: Unable to reach the server. Please check your network connesctions.");
+        } else {
+          setError(`Error: ${err.message}`);
+        }
       } finally {
         setLoading(false);
       }
@@ -52,7 +60,7 @@ const GetFilms = () => {
   }, []);
 
   if (loading) return <ProgressBar striped variant="warning" animated now={progress} className="progbar" />;
-  if (error) return <p>Error: {error}</p>;
+  if (error) return <p>{error}</p>;
 
   const filteredData = data1.filter(entry => {
     return (

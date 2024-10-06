@@ -39,7 +39,15 @@ const GetTopStore = () => {
         const response5 = await axios.get('/api/topactorall');
         setData5(response5.data);
       } catch (err) {
-        setError(err.message);
+        if(err.response) {
+          const status = err.response.status;
+          const statusText = err.response.statusText;
+          setError(`Error ${status}: ${statusText}, Please try again later.`);
+        } else if (err.request) {
+          setError("Netwrok error: Unable to reach the server. Please check your network connesctions.");
+        } else {
+          setError(`Error: ${err.message}`);
+        }
       } finally {
         setLoading(false);
       }
@@ -49,7 +57,7 @@ const GetTopStore = () => {
   }, []);
 
   if (loading) return <ProgressBar striped variant="warning" animated now={progress} className="progbar" />;
-  if (error) return <p>Error: {error}</p>;
+  if (error) return <p>{error}</p>;
 
   const handleActorClick = (actor) => {
     const topperFilter1 = data4.filter(item => item.actor_id === actor.actor_id && item.store_id === 1).slice(0,5);
