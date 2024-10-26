@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Table, Pagination, Modal, Button, ProgressBar } from "react-bootstrap";
 import { TextField } from "@mui/material";
+import RentOut from "./rentFilm";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const GetFilms = () => {
@@ -60,6 +61,18 @@ const GetFilms = () => {
 
     fetchData();
   }, []);
+
+  const HandleRented = () => {
+    const refreshData = async () => {
+      try {
+        const response = await axios.get("/api/currentrent");
+        setData3(response.data);
+      } catch (err) {
+        setError(err);
+      }
+    };
+    refreshData();
+  };
 
   if (loading)
     return (
@@ -179,13 +192,15 @@ const GetFilms = () => {
 
   const handleShowModal = (film) => {
     const storeinventory = data2.find((item) => item.film_id === film.film_id);
-    const storerented = data3.find((item) => item.film_id === film.film_id);
+    const storerented = data3.filter((item) => item.film_id === film.film_id);
+    console.log(storerented);
 
     setSelectedFilm({
       ...film,
       storeIn: storeinventory || {},
       storeOut: storerented || { rented: 0 },
     });
+
     setShowModal(true);
   };
 
@@ -202,7 +217,12 @@ const GetFilms = () => {
       </h3>
       <div
         className="filter-container mb-3"
-        style={{ alignSelf: "start", marginLeft: "5%" }}
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          alignSelf: "start",
+          marginLeft: "5%",
+        }}
       >
         <TextField
           label="Film Title"
@@ -297,7 +317,7 @@ const GetFilms = () => {
           {selectedFilm?.storeIn.total ? (
             <div>
               <p>Total Inventory: {selectedFilm.storeIn.total} copies</p>
-              <p>Currently Rented: {selectedFilm.storeOut.rented} copies</p>
+              <p>Currently Rented: {selectedFilm.storeOut.length} copies</p>
             </div>
           ) : (
             <p>We currently do not have this film in stock.</p>
@@ -309,6 +329,8 @@ const GetFilms = () => {
           </Button>
         </Modal.Footer>
       </Modal>
+
+      <RentOut onSuccess={HandleRented} />
     </div>
   );
 };

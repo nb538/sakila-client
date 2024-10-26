@@ -30,7 +30,7 @@ const GetTopStore = () => {
             clearInterval(interval);
             return 100;
           }
-          return prev + 10; // Increment progress
+          return prev + 10;
         });
       }, 100);
 

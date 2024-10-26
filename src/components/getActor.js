@@ -1,23 +1,23 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { DataGrid } from '@mui/x-data-grid/';
-import '../App.css';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { DataGrid } from "@mui/x-data-grid/";
+import "../App.css";
 
 const GetActor = ({ paginationModel, setPaginationModel }) => {
   const [comments, setComments] = useState([]);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-  const [customerId, setCustomerId] = useState('');
-  const [content, setContent] = useState('');
-  const [commentIdToDelete, setCommentIdToDelete] = useState('');
+  const [error, setError] = useState("");
+  const [customerId, setCustomerId] = useState("");
+  const [content, setContent] = useState("");
+  const [commentIdToDelete, setCommentIdToDelete] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('/api/actor');
+        const response = await axios.get("/api/actor");
         setData(response.data);
-        const response2 = await axios.get('/api/comments');
+        const response2 = await axios.get("/api/comments");
         setComments(response2.data);
       } catch (err) {
         setError(err.message);
@@ -33,10 +33,10 @@ const GetActor = ({ paginationModel, setPaginationModel }) => {
     e.preventDefault();
     try {
       const newComment = { customer_id: customerId, content };
-      const response = await axios.post('/api/comments', newComment);
+      const response = await axios.post("/api/comments", newComment);
       setComments([response.data, ...comments]);
-      setCustomerId('');
-      setContent('');
+      setCustomerId("");
+      setContent("");
     } catch (err) {
       setError(err.message);
     }
@@ -48,8 +48,12 @@ const GetActor = ({ paginationModel, setPaginationModel }) => {
 
     try {
       await axios.delete(`/api/comments/${commentIdToDelete}`);
-      setComments(comments.filter(comment => comment.comment_id !== parseInt(commentIdToDelete)));
-      setCommentIdToDelete(''); // Reset input field after deletion
+      setComments(
+        comments.filter(
+          (comment) => comment.comment_id !== parseInt(commentIdToDelete)
+        )
+      );
+      setCommentIdToDelete("");
     } catch (err) {
       setError(err.message);
     }
@@ -62,16 +66,16 @@ const GetActor = ({ paginationModel, setPaginationModel }) => {
   const getRowId2 = (row) => row.comment_id;
 
   const columns = [
-    { field: 'first_name', headerName: 'First Name', flex: 1 },
-    { field: 'last_name', headerName: 'Last Name', flex: 1 },
-    { field: 'last_update', headerName: 'Last Update', flex: 2 }
+    { field: "first_name", headerName: "First Name", flex: 1 },
+    { field: "last_name", headerName: "Last Name", flex: 1 },
+    { field: "last_update", headerName: "Last Update", flex: 2 },
   ];
 
   const commentColumns = [
-    { field: 'comment_id', headerName: 'Comment ID' },
-    { field: 'customer_id', headerName: 'Customer ID' },
-    { field: 'content', headerName: 'Comment', flex: 3 },
-    { field: 'created_at', headerName: 'Created At', flex: 1 }
+    { field: "comment_id", headerName: "Comment ID" },
+    { field: "customer_id", headerName: "Customer ID" },
+    { field: "content", headerName: "Comment", flex: 3 },
+    { field: "created_at", headerName: "Created At", flex: 1 },
   ];
 
   const changeHeight = () => {
@@ -93,7 +97,7 @@ const GetActor = ({ paginationModel, setPaginationModel }) => {
         onPaginationModelChange={setPaginationModel}
         pageSizeOptions={[5, 10, 20]}
         className="data-grid"
-        sx={{ width: '60%', height: changeHeight() }}
+        sx={{ width: "60%", height: changeHeight() }}
       />
 
       <div className="comments-container">
@@ -123,10 +127,10 @@ const GetActor = ({ paginationModel, setPaginationModel }) => {
           pageSizeOptions={[10]}
           pagination
           className="data-grid-comments"
-          sx={{ width: '100%', marginTop: '20px' }}
+          sx={{ width: "100%", marginTop: "20px" }}
         />
 
-        <form onSubmit={handleDelete} style={{ marginTop: '20px' }}>
+        <form onSubmit={handleDelete} style={{ marginTop: "20px" }}>
           <input
             type="number"
             placeholder="Comment ID to delete"
